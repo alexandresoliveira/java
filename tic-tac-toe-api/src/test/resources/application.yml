@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: tst
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:tst;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  flyway:
+    url: jdbc:h2:mem:tst;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
+    user: sa
+    password: password
+    encoding: "UTF-8"
+    baseline-on-migrate: true
+    clean-on-validation-error: true
