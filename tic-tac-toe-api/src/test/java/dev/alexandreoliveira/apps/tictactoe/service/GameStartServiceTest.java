@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.alexandreoliveira.apps.tictactoe.IntegratedBaseTest;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.repositories.GameRepository;
-import dev.alexandreoliveira.apps.tictactoe.usecases.game.start.GameStartService;
+import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.start.GameTicTacToeStartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -22,7 +22,7 @@ public class GameStartServiceTest extends IntegratedBaseTest {
   GameRepository gameRepository;
 
 	@Autowired
-  GameStartService gameStartService;
+  GameTicTacToeStartService gameStartService;
 
 	@BeforeEach
 	public void beforeEach() {

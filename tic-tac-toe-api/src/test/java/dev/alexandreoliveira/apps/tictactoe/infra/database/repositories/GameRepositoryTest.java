@@ -1,8 +1,13 @@
 package dev.alexandreoliveira.apps.tictactoe.infra.database.repositories;
 
-import dev.alexandreoliveira.apps.tictactoe.database.entity.GameStatus;
+import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameStatus;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameEntity;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -10,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @DataJpaTest
@@ -49,8 +55,8 @@ public class GameRepositoryTest {
   @Test
   @Order(3)
   void should_expected_an_exception_when_game_data_is_invalid() {
-    RuntimeException exception = Assertions.assertThrows(
-      RuntimeException.class,
+    ConstraintViolationException exception = Assertions.assertThrows(
+      ConstraintViolationException.class,
       () -> gameRepository.save(new GameEntity()),
       "Expected an exception"
     );

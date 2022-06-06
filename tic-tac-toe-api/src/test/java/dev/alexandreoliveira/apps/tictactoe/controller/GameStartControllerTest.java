@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import dev.alexandreoliveira.apps.tictactoe.infra.database.repositories.GameRepository;
-import dev.alexandreoliveira.apps.tictactoe.usecases.game.start.GameStartService;
+import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.start.GameTicTacToeStartService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,7 +20,7 @@ public class GameStartControllerTest extends BaseTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private GameStartService gameStartService;
+	private GameTicTacToeStartService gameStartService;
 
 	@MockBean
 	private GameRepository gameRepository;

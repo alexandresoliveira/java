@@ -1,24 +1,17 @@
 package dev.alexandreoliveira.apps.tictactoe.controller;
 
-import java.net.URI;
-
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import dev.alexandreoliveira.apps.tictactoe.dto.GameStartResponseDto;
-import dev.alexandreoliveira.apps.tictactoe.usecases.game.start.GameStartService;
+import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.start.GameTicTacToeStartService;
 
 @RestController
 @RequestMapping("v1/game")
 public class GameStartController {
 
-	private final GameStartService service;
+	private final GameTicTacToeStartService service;
 
-	public GameStartController(GameStartService service) {
+	public GameStartController(GameTicTacToeStartService service) {
 		this.service = service;
 	}
 
