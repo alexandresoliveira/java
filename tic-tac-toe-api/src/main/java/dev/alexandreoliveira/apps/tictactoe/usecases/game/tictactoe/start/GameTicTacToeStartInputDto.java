@@ -8,7 +8,10 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
-@GroupSequence({FieldValidationGroup.class, GameTicTacToeStartInputDto.class})
+@GroupSequence({
+  FieldValidationGroup.class,
+  GameTicTacToeStartInputDto.class
+})
 public class GameTicTacToeStartInputDto implements Serializable {
 
   @Pattern(regexp = "X|O", groups = {FieldValidationGroup.class})

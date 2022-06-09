@@ -3,8 +3,6 @@ package dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.impl;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameEntity;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.MovementEntity;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.repositories.MovementRepository;
-import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.movement.GameTicTacToeMovementException;
-import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.movement.GameTicTacToeMovementInputDto;
 import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.GameTicTacToePlayDAO;
 import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.GameTicTacToePlayException;
 import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.GameTicTacToePlayInputDto;

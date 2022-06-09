@@ -1,10 +1,11 @@
 package dev.alexandreoliveira.apps.tictactoe.controller;
 
+import dev.alexandreoliveira.apps.tictactoe.infra.http.controllers.v1.game.tictactoe.movement.GameTicTacToeMovementController;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-@WebMvcTest(GameMovementController.class)
+@WebMvcTest(GameTicTacToeMovementController.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class GameMovementControllerTest {
 

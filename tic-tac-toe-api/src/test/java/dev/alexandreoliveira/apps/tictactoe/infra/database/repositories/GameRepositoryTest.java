@@ -1,13 +1,8 @@
 package dev.alexandreoliveira.apps.tictactoe.infra.database.repositories;
 
-import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameStatus;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameEntity;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameStatus;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

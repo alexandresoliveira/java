@@ -5,7 +5,6 @@ import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.MovementEnti
 import dev.alexandreoliveira.apps.tictactoe.usecases.BaseDAO;
 import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.GameTicTacToePlayOutputDto;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface GameTicTacToeMovementDAO extends BaseDAO<GameTicTacToeMovementInputDto> {

@@ -32,7 +32,10 @@ public class GameTicTacToeStartDAOInMemory implements GameTicTacToeStartDAO {
       return entity;
     }
 
-    gameEntityList.set(gameEntityList.indexOf(entity), entity);
+    gameEntityList.set(
+      gameEntityList.indexOf(entity),
+      entity
+    );
     return entity;
   }
 }

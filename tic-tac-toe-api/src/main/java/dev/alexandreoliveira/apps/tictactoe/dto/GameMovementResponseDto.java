@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class GameMovementResponseDto {
 
-	private String status;
-	private String winner;
+  private String status;
+  private String winner;
 }

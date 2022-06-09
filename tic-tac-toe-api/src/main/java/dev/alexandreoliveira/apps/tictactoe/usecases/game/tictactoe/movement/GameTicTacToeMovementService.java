@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@Service
+@Service("gameTicTacToeMovementService")
 public class GameTicTacToeMovementService implements TicTacToeService<GameTicTacToeMovementInputDto, GameTicTacToeMovementOutputDto> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GameTicTacToeMovementService.class);
   private static final String GAME_FINISH = "Partida finalizada";

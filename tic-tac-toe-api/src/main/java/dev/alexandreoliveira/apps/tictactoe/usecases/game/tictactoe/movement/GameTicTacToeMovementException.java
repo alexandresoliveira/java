@@ -6,7 +6,13 @@ public class GameTicTacToeMovementException extends RuntimeException {
     super(message);
   }
 
-  public GameTicTacToeMovementException(final String message, final Throwable throwable) {
-    super(message, throwable);
+  public GameTicTacToeMovementException(
+    final String message,
+    final Throwable throwable
+  ) {
+    super(
+      message,
+      throwable
+    );
   }
 }

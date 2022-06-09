@@ -1,31 +1,30 @@
 package dev.alexandreoliveira.apps.tictactoe.dto;
 
-import java.io.Serializable;
-import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.Serializable;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class GameMovementRequestDto implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@NotNull
-	private UUID id;
-	
-	@NotNull
-	@Pattern(regexp = "X|O")
-	private String player;
+  @NotNull
+  private UUID id;
 
-	@NotNull
-	@Valid
-	private GameMovementPositionDto position;
+  @NotNull
+  @Pattern(regexp = "X|O")
+  private String player;
+
+  @NotNull
+  @Valid
+  private GameMovementPositionDto position;
 }

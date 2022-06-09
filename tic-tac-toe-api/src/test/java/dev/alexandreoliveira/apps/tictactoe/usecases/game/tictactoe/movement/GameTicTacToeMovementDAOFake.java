@@ -10,7 +10,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
   protected List<GameEntity> gameEntityList = new ArrayList<>();
@@ -23,9 +22,8 @@ public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
     }
 
     try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
-      Set<ConstraintViolation<GameTicTacToeMovementInputDto>> constraintViolations = validatorFactory
-        .getValidator()
-        .validate(input);
+      Set<ConstraintViolation<GameTicTacToeMovementInputDto>> constraintViolations = validatorFactory.getValidator()
+                                                                                                     .validate(input);
       if (!constraintViolations.isEmpty()) {
         throw new ConstraintViolationException(constraintViolations);
       }
@@ -39,15 +37,11 @@ public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
 
   @Override
   public GameEntity findGameById(UUID id) {
-    return gameEntityList
-      .stream()
-      .filter(filter -> filter
-        .getId()
-        .equals(id) && filter
-        .getStatus()
-        .equals(GameStatus.INPROGRESS))
-      .findFirst()
-      .orElseThrow(() -> new GameTicTacToeMovementException("O jogo não foi encontrado"));
+    return gameEntityList.stream()
+                         .filter(filter -> filter.getId().equals(id) && filter.getStatus()
+                                                                              .equals(GameStatus.INPROGRESS))
+                         .findFirst()
+                         .orElseThrow(() -> new GameTicTacToeMovementException("O jogo não foi encontrado"));
   }
 
   @Override
@@ -56,16 +50,12 @@ public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
     Integer positionX,
     Integer positionY
   ) {
-    return movementEntityList
-      .stream()
-      .anyMatch(filter ->
-        isValidMovement(
-          gameEntity,
-          positionX,
-          positionY,
-          filter
-        )
-      );
+    return movementEntityList.stream().anyMatch(filter -> isValidMovement(
+      gameEntity,
+      positionX,
+      positionY,
+      filter
+    ));
   }
 
   private boolean isValidMovement(
@@ -74,16 +64,8 @@ public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
     Integer positionY,
     MovementEntity filter
   ) {
-    return filter
-      .getGame()
-      .getId()
-      .equals(gameEntity.getId()) &&
-      filter
-        .getX()
-        .equals(positionX) &&
-      filter
-        .getY()
-        .equals(positionY);
+    return filter.getGame().getId().equals(gameEntity.getId()) && filter.getX().equals(positionX) && filter.getY()
+                                                                                                           .equals(positionY);
   }
 
   @Override
@@ -93,44 +75,29 @@ public class GameTicTacToeMovementDAOFake implements GameTicTacToeMovementDAO {
 
   @Override
   public GameTicTacToePlayOutputDto checkGameMovement(UUID gameId) {
-    final AtomicInteger indexX = new AtomicInteger(0);
-    final AtomicInteger indexY = new AtomicInteger(0);
-
-    List<MovementEntity> movementEntities = movementEntityList
-      .stream()
-      .filter(filter -> {
-        if (
-            filter.getX().equals(indexX.get()) &&
-            filter.getY().equals(indexY.get()) &&
-            filter.getGame().getId().equals(gameId)
-        ) {
-          indexX.set(0);
-          indexY.set(indexY.get() + 1);
-          return true;
-        }
-        return false;
-      })
-      .toList();
-
-    return new GameTicTacToePlayOutputDto(
-      movementEntities.size() == 3,
-      movementEntityList
-        .get(0)
-        .getPlayer()
-    );
+    if (movementEntityList.size() == 9) {
+      return new GameTicTacToePlayOutputDto(
+        true,
+        "-"
+      );
+    } else if (movementEntityList.size() == 3 && movementEntityList.get(0).getPlayer().equals("X")) {
+      return new GameTicTacToePlayOutputDto(
+        true,
+        movementEntityList.get(0).getPlayer()
+      );
+    } else {
+      return new GameTicTacToePlayOutputDto(
+        false,
+        ""
+      );
+    }
   }
 
   @Override
   public void saveGame(GameEntity entity) {
-    gameEntityList
-      .stream()
-      .filter(filter -> filter
-        .getId()
-        .equals(entity.getId()))
-      .findFirst()
-      .ifPresentOrElse(
-        gameEntity -> gameEntity = entity,
-        () -> gameEntityList.add(entity)
-      );
+    gameEntityList.stream().filter(filter -> filter.getId().equals(entity.getId())).findFirst().ifPresentOrElse(
+      gameEntity -> gameEntity = entity,
+      () -> gameEntityList.add(entity)
+    );
   }
 }

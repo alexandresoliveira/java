@@ -156,21 +156,21 @@ public class GameTicTacToeMovementServiceTest {
   void should_expected_a_finish_game_with_winner() {
     var gameEntityFake = new GameEntity();
     gameEntityFake.setId(UUID.randomUUID());
-    gameEntityFake.setActualPlayer("O");
+    gameEntityFake.setActualPlayer("X");
     gameEntityFake.setStatus(GameStatus.INPROGRESS);
 
     var movementEntityFake_1 = new MovementEntity();
     movementEntityFake_1.setGame(gameEntityFake);
     movementEntityFake_1.setX(0);
     movementEntityFake_1.setY(0);
-    movementEntityFake_1.setPlayer("O");
+    movementEntityFake_1.setPlayer("X");
     movementEntityFake_1.setId(UUID.randomUUID());
 
     var movementEntityFake_2 = new MovementEntity();
     movementEntityFake_2.setGame(gameEntityFake);
     movementEntityFake_2.setX(0);
     movementEntityFake_2.setY(1);
-    movementEntityFake_2.setPlayer("O");
+    movementEntityFake_2.setPlayer("X");
     movementEntityFake_2.setId(UUID.randomUUID());
 
     var dao = new GameTicTacToeMovementDAOFake();
@@ -182,7 +182,7 @@ public class GameTicTacToeMovementServiceTest {
 
     var input = new GameTicTacToeMovementInputDto(
       gameEntityFake.getId(),
-      "O",
+      "X",
       0,
       2
     );
@@ -191,7 +191,7 @@ public class GameTicTacToeMovementServiceTest {
 
     assertThat(outputDto.getMessage()).isEqualTo("Partida finalizada");
     assertThat(outputDto.getStatus()).isEqualTo(GameStatus.DONE.name());
-    assertThat(outputDto.getWinner()).isEqualTo("O");
+    assertThat(outputDto.getWinner()).isEqualTo("X");
   }
 
   @Test
@@ -273,5 +273,80 @@ public class GameTicTacToeMovementServiceTest {
     assertThat(outputDto.getMessage()).isEqualTo("Partida finalizada");
     assertThat(outputDto.getStatus()).isEqualTo(GameStatus.DONE.name());
     assertThat(outputDto.getWinner()).isEqualTo("-");
+  }
+
+  @Test
+  @Order(8)
+  void should_expected_a_in_progress_game() {
+    var gameEntityFake = new GameEntity();
+    gameEntityFake.setId(UUID.randomUUID());
+    gameEntityFake.setActualPlayer("O");
+
+    List<MovementEntity> inProgressBoard =
+      List.of(
+        new MovementEntity(
+          gameEntityFake,
+          "X",
+          0,
+          0
+        ),
+        new MovementEntity(
+          gameEntityFake,
+          "X",
+          0,
+          1
+        ),
+        new MovementEntity(
+          gameEntityFake,
+          "O",
+          0,
+          2
+        ),
+
+        new MovementEntity(
+          gameEntityFake,
+          "O",
+          1,
+          0
+        ),
+        new MovementEntity(
+          gameEntityFake,
+          "O",
+          1,
+          1
+        ),
+        new MovementEntity(
+          gameEntityFake,
+          "X",
+          1,
+          2
+        ),
+
+        new MovementEntity(
+          gameEntityFake,
+          "X",
+          2,
+          0
+        )
+      );
+
+    var dao = new GameTicTacToeMovementDAOFake();
+    dao.gameEntityList.add(gameEntityFake);
+    dao.movementEntityList.addAll(inProgressBoard);
+
+    var sut = new GameTicTacToeMovementService(dao);
+
+    var input = new GameTicTacToeMovementInputDto(
+      gameEntityFake.getId(),
+      "O",
+      2,
+      2
+    );
+
+    GameTicTacToeMovementOutputDto outputDto = sut.execute(input);
+
+    assertThat(outputDto.getMessage()).isEqualTo("Em andamento");
+    assertThat(outputDto.getStatus()).isEqualTo(GameStatus.INPROGRESS.name());
+    assertThat(outputDto.getWinner()).isEmpty();
   }
 }
