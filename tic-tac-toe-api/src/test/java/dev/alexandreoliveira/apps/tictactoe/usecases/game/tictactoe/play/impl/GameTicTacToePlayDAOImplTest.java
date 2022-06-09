@@ -1,13 +1,12 @@
-package dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.movement.impl;
+package dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.play.impl;
 
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.GameEntity;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.entities.MovementEntity;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.repositories.GameRepository;
 import dev.alexandreoliveira.apps.tictactoe.infra.database.repositories.MovementRepository;
+import dev.alexandreoliveira.apps.tictactoe.usecases.game.tictactoe.movement.impl.GameTicTacToeMovementDAOImpl;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,21 +19,19 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @DirtiesContext
 @ActiveProfiles("test-with-postgressql-14.3")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class GameTicTacToeMovementDAOImplTest {
+public class GameTicTacToePlayDAOImplTest {
 
   @Autowired
-  GameTicTacToeMovementDAOImpl sut;
+  GameTicTacToePlayDAOImpl sut;
 
   @Autowired
   GameRepository gameRepository;
@@ -69,88 +66,60 @@ class GameTicTacToeMovementDAOImplTest {
     gameRepository.deleteAll();
   }
 
-  @ParameterizedTest
-  @MethodSource("should_find_game_with_id_data")
+  @Test
   @Order(1)
-  void should_find_game_with_id(GameEntity entity) {
-    GameEntity gameEntity = gameRepository.save(entity);
-
-    GameEntity gameById = sut.findGameById(gameEntity.getId());
-
-    assertNotNull(gameById);
-    assertNotNull(gameById.getId());
-  }
-
-  static Stream<Arguments> should_find_game_with_id_data() {
-    var game_1 = new GameEntity();
-    game_1.setActualPlayer("X");
-    game_1.setWinner("-");
-
-    var game_2 = new GameEntity();
-    game_2.setActualPlayer("X");
-    game_2.setWinner("-");
-
-    return Stream.of(
-      Arguments.of(game_1),
-      Arguments.of(game_2)
-    );
-  }
-
-  @TestFactory
-  @Order(2)
-  List<DynamicTest> should_find_movement_by_game_and_positions() {
+  void should_expected_a_list_of_movements() {
     GameEntity game_1 = new GameEntity();
     game_1.setActualPlayer("X");
     game_1.setWinner("-");
 
+    GameEntity savedGame_1 = gameRepository.save(game_1);
+
     MovementEntity movement_1 = new MovementEntity();
+    movement_1.setPlayer("O");
     movement_1.setY(1);
     movement_1.setX(1);
-    movement_1.setPlayer("X");
+    movement_1.setGame(savedGame_1);
 
-    GameEntity savedGameEntity_1 = gameRepository.save(game_1);
-    movement_1.setGame(savedGameEntity_1);
-    movementRepository.save(movement_1);
+    MovementEntity movement_2 = new MovementEntity();
+    movement_2.setPlayer("X");
+    movement_2.setY(0);
+    movement_2.setX(1);
+    movement_2.setGame(savedGame_1);
 
-    return List.of(
-      dynamicTest("exists movement", () -> assertTrue(sut.findMovementByGameAndXAndY(savedGameEntity_1, 1, 1))),
-      dynamicTest("no exists movement", () -> assertFalse(sut.findMovementByGameAndXAndY(savedGameEntity_1, 2, 1)))
-    );
-  }
+    movementRepository.saveAll(List.of(movement_1, movement_2));
 
-  @Test
-  @Order(3)
-  void should_save_movement() {
-    GameEntity gameEntity = new GameEntity();
-    gameEntity.setActualPlayer("X");
-    gameEntity.setWinner("-");
+    List<MovementEntity> movementEntityList = sut.findMovementsByGameId(savedGame_1.getId());
 
-    GameEntity savedGameEntity = gameRepository.save(gameEntity);
-
-    MovementEntity movementEntity = new MovementEntity();
-    movementEntity.setGame(savedGameEntity);
-    movementEntity.setX(1);
-    movementEntity.setY(1);
-    movementEntity.setPlayer("X");
-
-    sut.saveMovement(movementEntity);
-
-    List<MovementEntity> movementEntityList = movementRepository.findAll();
     assertThat(movementEntityList).isNotEmpty();
-    assertThat(movementEntityList.size()).isEqualTo(1);
+    assertThat(movementEntityList.size()).isEqualTo(2);
   }
 
   @Test
-  @Order(4)
-  void should_save_game() {
-    GameEntity gameEntity = new GameEntity();
-    gameEntity.setActualPlayer("X");
-    gameEntity.setWinner("-");
+  @Order(2)
+  void must_be_empty_movement_list_with_invalid_game_id() {
+    GameEntity game_1 = new GameEntity();
+    game_1.setActualPlayer("X");
+    game_1.setWinner("-");
 
-    sut.saveGame(gameEntity);
+    GameEntity savedGame_1 = gameRepository.save(game_1);
 
-    List<GameEntity> gameEntityList = gameRepository.findAll();
-    assertThat(gameEntityList).isNotEmpty();
-    assertThat(gameEntityList.size()).isEqualTo(1);
+    MovementEntity movement_1 = new MovementEntity();
+    movement_1.setPlayer("O");
+    movement_1.setY(1);
+    movement_1.setX(1);
+    movement_1.setGame(savedGame_1);
+
+    MovementEntity movement_2 = new MovementEntity();
+    movement_2.setPlayer("X");
+    movement_2.setY(0);
+    movement_2.setX(1);
+    movement_2.setGame(savedGame_1);
+
+    movementRepository.saveAll(List.of(movement_1, movement_2));
+
+    List<MovementEntity> movementEntityList = sut.findMovementsByGameId(UUID.randomUUID());
+
+    assertThat(movementEntityList).isEmpty();
   }
 }

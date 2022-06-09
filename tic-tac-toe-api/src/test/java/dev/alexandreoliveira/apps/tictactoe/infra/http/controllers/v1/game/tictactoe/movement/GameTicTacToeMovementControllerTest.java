@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.net.URI;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -83,18 +83,8 @@ class GameTicTacToeMovementControllerTest {
     mockMvc
       .perform(requestBuilder)
       .andExpect(status().isBadRequest())
-      .andExpect(jsonPath(
-        "$",
-        hasKey("player")
-      ))
-      .andExpect(jsonPath(
-        "$",
-        hasKey("positionX")
-      ))
-      .andExpect(jsonPath(
-        "$",
-        hasKey("positionY")
-      ));
+      .andExpect(jsonPath("$").isArray())
+      .andExpect(jsonPath("$", hasSize(3)));
   }
 
   @Test
@@ -116,10 +106,8 @@ class GameTicTacToeMovementControllerTest {
     mockMvc
       .perform(requestBuilder)
       .andExpect(status().isBadRequest())
-      .andExpect(jsonPath(
-        "$",
-        hasKey("player")
-      ));
+      .andExpect(jsonPath("$").isArray())
+      .andExpect(jsonPath("$", hasSize(1)));
   }
 
   @Test
@@ -141,10 +129,8 @@ class GameTicTacToeMovementControllerTest {
     mockMvc
       .perform(requestBuilder)
       .andExpect(status().isBadRequest())
-      .andExpect(jsonPath(
-        "$",
-        hasKey("positionX")
-      ));
+      .andExpect(jsonPath("$").isArray())
+      .andExpect(jsonPath("$", hasSize(1)));
   }
 
   @Test
@@ -166,10 +152,8 @@ class GameTicTacToeMovementControllerTest {
     mockMvc
       .perform(requestBuilder)
       .andExpect(status().isBadRequest())
-      .andExpect(jsonPath(
-        "$",
-        hasKey("positionY")
-      ));
+      .andExpect(jsonPath("$").isArray())
+      .andExpect(jsonPath("$", hasSize(1)));
   }
 
   @Test

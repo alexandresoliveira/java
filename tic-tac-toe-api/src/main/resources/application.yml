@@ -18,4 +18,8 @@ spring:
     encoding: "UTF-8"
     baseline-on-migrate: true
     clean-on-validation-error: true
-    
+
+app:
+  notification:
+    amazon:
+      url: http://localhost:9999
