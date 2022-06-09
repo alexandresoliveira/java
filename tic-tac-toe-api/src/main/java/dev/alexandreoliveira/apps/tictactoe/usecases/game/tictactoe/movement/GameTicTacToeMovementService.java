@@ -29,27 +29,27 @@ public class GameTicTacToeMovementService implements TicTacToeService<GameTicTac
   public GameTicTacToeMovementOutputDto execute(GameTicTacToeMovementInputDto input) {
     dao.isValid(input);
 
-    GameEntity game = dao.findGameById(input.getGameId());
+    GameEntity game = dao.findGameById(input.gameId());
 
     if (!game
       .getActualPlayer()
-      .equalsIgnoreCase(input.getPlayer())) {
+      .equalsIgnoreCase(input.player())) {
       throw new GameTicTacToeMovementException("Não é a sua vez de jogar!");
     }
 
     if (dao.findMovementByGameAndXAndY(
       game,
-      input.getPositionX(),
-      input.getPositionY()
+      input.positionX(),
+      input.positionY()
     )) {
       throw new GameTicTacToeMovementException("Movimento inválido: este espaço está ocupado");
     }
 
     var actualMovement = new MovementEntity(
       game,
-      input.getPlayer(),
-      input.getPositionX(),
-      input.getPositionY()
+      input.player(),
+      input.positionX(),
+      input.positionY()
     );
     dao.saveMovement(actualMovement);
 
@@ -85,7 +85,7 @@ public class GameTicTacToeMovementService implements TicTacToeService<GameTicTac
 
     game.setStatus(GameStatus.INPROGRESS);
     game.setActualPlayer(input
-      .getPlayer()
+      .player()
       .equalsIgnoreCase("X") ? "O" : "X");
     dao.saveGame(game);
 
