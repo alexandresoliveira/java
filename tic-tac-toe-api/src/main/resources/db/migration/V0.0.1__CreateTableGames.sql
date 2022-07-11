@@ -1,4 +1,4 @@
-create table games (
+CREATE TABLE games (
 	id uuid primary key,
 	actual_player varchar(1) not null,
 	status varchar(10) not null,
