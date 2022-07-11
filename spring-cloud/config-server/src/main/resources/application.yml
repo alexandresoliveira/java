@@ -1,0 +1,12 @@
+
+server:
+  port: 8888
+  
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          default-label: main
+          uri: https://github.com/alexandresoliveira/spring-cloud      
+          search-paths: cloud-configs/fornecedor, cloud-configs/loja, cloud-configs/transportador

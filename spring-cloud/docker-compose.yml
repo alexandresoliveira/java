@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  fornecedor-db:
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=fornecedor-db
+      - MYSQL_USER=fornecedor
+      - MYSQL_PASSWORD=fornecedor
+    volumes:
+      - "fornecedor-db-data:/var/lib/mysql"
+    networks:
+      - "spring-cloud-network"
+    ports:
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  loja-db:
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=loja-db
+      - MYSQL_USER=loja
+      - MYSQL_PASSWORD=loja
+    volumes:
+      - "loja-db-data:/var/lib/mysql"
+    networks:
+      - "spring-cloud-network"
+    ports:
+      - "3307:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  transportador-db:
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=transportador-db
+      - MYSQL_USER=transportador
+      - MYSQL_PASSWORD=transportador
+    volumes:
+      - "transportador-db-data:/var/lib/mysql"
+    networks:
+      - "spring-cloud-network"
+    ports:
+      - "3308:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+volumes:
+  fornecedor-db-data:
+    driver: local
+  loja-db-data:
+    driver: local
+  transportador-db-data:
+    driver: local
+
+networks:
+  spring-cloud-network:
+    driver: bridge
