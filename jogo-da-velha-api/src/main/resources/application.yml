@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: "@spring.profiles.active@"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: "@jpa.show.sql@"
+    database-platform: "@db.database.platform@"
+  datasource:
+    url: "@db.url@"
+    driver-class-name: "@db.driver.class.name@"
+    username: "@db.user@"
+    password: "@db.password@"
+  flyway:
+    url: "@db.url@"
+    user: "@db.user@"
+    password: "@db.password@"
+    encoding: "UTF-8"
+    baseline-on-migrate: true
+    clean-on-validation-error: true
+    
