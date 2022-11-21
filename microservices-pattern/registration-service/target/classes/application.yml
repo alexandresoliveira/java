@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dev-database
+    username: dev
+    password: dev
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 2
+      idle-timeout: 10000
+      max-lifetime: 60000
+      connection-timeout: 5000
+      pool-name: MPRegistrationServiceHikariPool
+  flyway:
+    url: jdbc:postgresql://localhost:5432/dev-database
+    user: dev
+    password: dev
+    encoding: UTF-8
+    baseline-on-migrate: true
+    clean-on-validation-error: false
+    clean-disabled: true
+    locations:
+      - classpath:db/migration/postgresql
+    enabled: true
+  servlet:
+    multipart:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL

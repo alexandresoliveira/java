@@ -1,0 +1,33 @@
+version: '3.2'
+
+services:
+  mp-database:
+    image: postgres:15.1-alpine
+    container_name: mp-database
+    env_file:
+      - mp-database.env
+    ports:
+      - "5432:5432"
+    networks:
+      - mp-network
+    volumes:
+      - "./volumes/mp-database/init:/docker-entrypoint-initdb.d"
+      - "./volumes/mp-database/data:/var/lib/postgresql/data"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  mp-redis:
+    image: redis:7.0.5-alpine
+    container_name: mp-redis
+    env_file:
+      - mp-redis.env
+    ports:
+      - "6379:6379"
+    networks:
+      - mp-network
+    volumes:
+      - "./volumes/mp-redis/data:/data"
+networks:
+  mp-network:
+    driver: bridge
