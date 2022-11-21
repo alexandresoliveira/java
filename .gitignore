@@ -1,0 +1,4 @@
+/microservices-pattern/docker/volumes/mp-database/data/*
+/microservices-pattern/docker/volumes/mp-redis/data/*
+/microservices-pattern/.idea
+
