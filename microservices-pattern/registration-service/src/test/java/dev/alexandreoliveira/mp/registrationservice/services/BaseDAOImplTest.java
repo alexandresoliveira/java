@@ -18,7 +18,7 @@ import static org.springframework.data.util.ReflectionUtils.findField;
 import static org.springframework.util.ReflectionUtils.FieldFilter;
 
 @DirtiesContext
-@ActiveProfiles({""})
+@ActiveProfiles({"dev-tst"})
 public class BaseDAOImplTest {
 
   @TempDir

@@ -18,6 +18,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lettuce-core.version>6.2.1.RELEASE</lettuce-core.version>
     </properties>
 
     <dependencyManagement>

@@ -3,48 +3,60 @@ package dev.alexandreoliveira.mp.registrationservice.architecture;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.syntax.elements.ClassesThat;
-import com.tngtech.archunit.lang.syntax.elements.GivenClassesConjunction;
 import dev.alexandreoliveira.mp.registrationservice.services.AppService;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.constructors;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AnalyzeClasses(packages = "dev.alexandreoliveira.mp.registrationservice.controllers")
 class ControllerArchitectureTest {
 
-  private static ClassesThat<GivenClassesConjunction> CLASSES_THAT = null;
-
   @ArchTest
   static final ArchRule mustControllersAreRestControllers =
-    classesThatSingleton()
+    classes()
+      .that()
       .haveSimpleNameEndingWith("Controller")
       .should()
       .beAnnotatedWith(RestController.class)
       .andShould()
       .beAnnotatedWith(RequestMapping.class);
 
+  @ArchTest
+  static final ArchRule mustControllerHaveOnlyServiceField =
+    fields()
+      .that()
+      .areDeclaredInClassesThat()
+      .haveSimpleNameEndingWith("Controller")
+      .and()
+      .haveRawType(AppService.class)
+      .should()
+      .bePrivate()
+      .andShould()
+      .beFinal();
 
   @ArchTest
-  static final ArchRule mustControllersContainsOnlyServiceField =
-    classesThatSingleton()
+  static final ArchRule mustControllersHaveConstructorWithAppServiceParam =
+    constructors()
+      .that()
+      .areDeclaredInClassesThat()
+      .haveSimpleNameEndingWith("Controller")
+      .and()
+      .arePublic()
+      .should()
+      .haveRawParameterTypes(AppService.class);
+
+  @ArchTest
+  static final ArchRule mustControllersHaveHandleMethod =
+    methods()
+      .that()
+      .areDeclaredInClassesThat()
       .haveSimpleNameEndingWith("Controller")
       .should()
-      .getField(
-        AppService.class,
-        "service"
-      );
-
-  static ClassesThat<GivenClassesConjunction> classesThatSingleton() {
-    if (Objects.isNull(CLASSES_THAT)) {
-      CLASSES_THAT = classes().that();
-    }
-    return CLASSES_THAT;
-  }
+      .haveName("handle")
+      .andShould()
+      .bePublic();
 }

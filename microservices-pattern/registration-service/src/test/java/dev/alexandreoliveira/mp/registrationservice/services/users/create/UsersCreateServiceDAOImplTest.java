@@ -3,7 +3,6 @@ package dev.alexandreoliveira.mp.registrationservice.services.users.create;
 import dev.alexandreoliveira.mp.registrationservice.configurations.jpa.JpaConfiguation;
 import dev.alexandreoliveira.mp.registrationservice.database.jpa.entities.UserEntity;
 import dev.alexandreoliveira.mp.registrationservice.database.jpa.repositories.UserRepository;
-import dev.alexandreoliveira.mp.registrationservice.services.BaseDAOImplTest;
 import dev.alexandreoliveira.mp.registrationservice.services.H2BaseDAOImplTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -13,16 +12,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
-
 import java.util.List;
 import java.util.Optional;
 
