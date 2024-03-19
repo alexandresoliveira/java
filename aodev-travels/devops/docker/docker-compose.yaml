@@ -1,0 +1,180 @@
+version: "3.8"
+
+x-aodev-travels-database-common:
+  &aodev-travels-database-common
+  image: docker.io/bitnami/postgresql:16
+  networks:
+    - aodev-travels-network
+  deploy:
+    resources:
+      limits:
+        memory: 64M
+
+services:
+  aodev-travels-reservations-primary-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-reservations-primary-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_USERNAME=dev
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_DATABASE=aodev-travels-reservations-db
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5432:5432
+    volumes:
+      - "./volumes/aodev-travels-reservations-db/primary:/bitnami/postgresql"
+  aodev-travels-reservations-replica-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-reservations-replica-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_MASTER_HOST=aodev-travels-reservations-primary-db
+      - POSTGRESQL_USERNAME=dev
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5436:5432
+    volumes:
+      - "./volumes/aodev-travels-reservations-db/replica:/bitnami/postgresql"
+    depends_on:
+      - aodev-travels-reservations-primary-db
+  aodev-travels-flights-primary-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-flights-primary-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_USERNAME=dev
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_DATABASE=aodev-travels-flights-db
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5433:5432
+    volumes:
+      - "./volumes/aodev-travels-flights-db/primary:/bitnami/postgresql"
+  aodev-travels-flights-replica-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-flights-replica-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_MASTER_HOST=aodev-travels-flights-primary-db
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5437:5432
+    volumes:
+      - "./volumes/aodev-travels-flights-db/replica:/bitnami/postgresql"
+    depends_on:
+      - aodev-travels-flights-primary-db
+  aodev-travels-hotels-primary-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-hotels-primary-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_USERNAME=dev
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_DATABASE=aodev-travels-hotels-db
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5434:5432
+    volumes:
+      - "./volumes/aodev-travels-hotels-db/primary:/bitnami/postgresql"
+  aodev-travels-hotels-replica-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-hotels-replica-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_MASTER_HOST=aodev-travels-hotels-primary-db
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5438:5432
+    volumes:
+      - "./volumes/aodev-travels-hotels-db/replica:/bitnami/postgresql"
+    depends_on:
+      - aodev-travels-hotels-primary-db
+  aodev-travels-rent-car-primary-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-rent-car-primary-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_USERNAME=dev
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_DATABASE=aodev-travels-rent-car-db
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5435:5432
+    volumes:
+      - "./volumes/aodev-travels-rent-car-db/primary:/bitnami/postgresql"
+  aodev-travels-rent-car-replica-db:
+    <<: *aodev-travels-database-common
+    container_name: aodev-travels-rent-car-replica-db
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=dev_replica
+      - POSTGRESQL_REPLICATION_PASSWORD=dev
+      - POSTGRESQL_MASTER_HOST=aodev-travels-rent-car-primary-db
+      - POSTGRESQL_PASSWORD=dev
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 5439:5432
+    volumes:
+      - "./volumes/aodev-travels-rent-car-db/replica:/bitnami/postgresql"
+    depends_on:
+      - aodev-travels-rent-car-primary-db
+  kafka:
+    image: docker.io/bitnami/kafka:3.6
+    container_name: aodev-travels-kafka
+    ports:
+      - "9092:9092"
+    networks:
+      - aodev-travels-network
+    volumes:
+      - "./volumes/aodev-travels-kafka:/bitnami"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+#  kafdrop:
+#    <<: *aodev-travels-common
+#    image: obsidiandynamics/kafdrop:4.0.1
+#    ports:
+#      - 19000:9000
+#    networks:
+#      - aodev-travels-network
+#    environment:
+#      - KAFKA_BROKERCONNECT=kafka:9092
+#    depends_on:
+#      - kafka
+
+networks:
+  aodev-travels-network:
+    driver: bridge

@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+app:
+  databases:
+    write:
+      url: jdbc:postgresql://localhost:5432/aodev-travels-reservations-db
+      username: dev
+      password: dev
+      hikari:
+        minimum-idle: 1
+        maximum-pool-size: 2
+        idle-timeout: 10000
+        max-lifetime: 60000
+        connection-timeout: 5000
+        pool-name: WriteAODevTravelsReservationsHikariPool
+      hibernate:
+        ddl-auto: validate
+        show-sql: true
+    read:
+      url: jdbc:postgresql://localhost:5436/aodev-travels-reservations-db
+      username: dev
+      password: dev
+      hikari:
+        minimum-idle: 1
+        maximum-pool-size: 2
+        idle-timeout: 10000
+        max-lifetime: 60000
+        connection-timeout: 5000
+        pool-name: ReadAODevTravelsReservationsHikariPool
+      hibernate:
+        ddl-auto: validate
+        show-sql: true
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: false
+    allow-circular-references: false
+  flyway:
+    url: jdbc:postgresql://localhost:5432/aodev-travels-reservations-db
+    user: dev
+    password: dev
+    encoding: UTF-8
+    baseline-on-migrate: true
+    clean-disabled: true
+    locations:
+      - "db/migrations/postgresql"
+    enabled: true
+  servlet:
+    multipart:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL

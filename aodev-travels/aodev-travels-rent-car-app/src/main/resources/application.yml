@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: aodev-travels-rent-car-app
+  profiles:
+    active: dev
+  config:
+    import: 'optional:configserver:http://dev:dev@localhost:8080'
+  cloud:
+    config:
+      label: develop

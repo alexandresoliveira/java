@@ -1,0 +1,40 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: develop
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5433/aodev-travels-flights-db
+    username: dev
+    password: dev
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 2
+      idle-timeout: 10000
+      max-lifetime: 60000
+      connection-timeout: 5000
+      pool-name: RabobankTravelsFlightsHikariPool
+  flyway:
+    url: jdbc:postgresql://localhost:5433/aodev-travels-flights-db
+    user: dev
+    password: dev
+    encoding: UTF-8
+    baseline-on-migrate: true
+    clean-disabled: true
+    locations:
+      - "db/migrations/postgresql"
+    enabled: true
+  servlet:
+    multipart:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL
+
